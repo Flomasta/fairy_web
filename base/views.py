@@ -3,6 +3,8 @@ from django.db.models import Q
 from django.http import HttpResponse
 from .models import Room, Topic
 from .forms import RoomForm
+from django.contrib.auth.models import User
+
 
 
 # Create your views here.
@@ -12,6 +14,15 @@ from .forms import RoomForm
 #     {'id': 2, 'name': 'Second room'},
 #     {'id': 3, 'name': 'Third room'},
 # ]
+
+def loginPage(request):
+    context = {}
+    if request.method == 'POST':
+        email = request.POST.get('username')
+        password = request.POST.get('password')
+
+
+    return render(request, 'base/login_register.html', context)
 
 
 def home(request):
