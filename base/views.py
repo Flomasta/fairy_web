@@ -6,6 +6,8 @@ from .forms import RoomForm
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -17,6 +19,8 @@ from django.contrib.auth import authenticate, login, logout
 # ]
 
 def loginPage(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -34,6 +38,11 @@ def loginPage(request):
     return render(request, 'base/login_register.html', context)
 
 
+def logoutPage(request):
+    logout(request)
+    return redirect('home')
+
+
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     rooms = Room.objects.filter(Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q))
@@ -49,8 +58,11 @@ def room(request, pk):
     return render(request, 'base/room.html', context)
 
 
+@login_required(login_url='login_page')
 def createRoom(request):
     form = RoomForm()
+    if request.user != room.host or request.user:
+        return HttpResponse('You are not allowed here')
     if request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
@@ -60,6 +72,7 @@ def createRoom(request):
     return render(request, 'base/room_form.html', context)
 
 
+@login_required(login_url='login_page')
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
@@ -73,8 +86,12 @@ def updateRoom(request, pk):
     return render(request, 'base/room_form.html', context)
 
 
+@login_required(login_url='login_page')
 def deleteRoom(request, pk):
     room = Room.objects.get(id=pk)
+
+    if request.user != room.host or request.user:
+        return HttpResponse('You are not allowed here')
     if request.method == 'POST':
         room.delete()
         return redirect('home')
