@@ -10,4 +10,6 @@ urlpatterns = [
     path('login/', views.loginPage, name='login_page'),
     path('logout/', views.logoutPage, name='logout_page'),
     path('register/', views.registerPage, name='register_page'),
+    path('delete-message/<str:pk>/', views.deleteMessage, name='delete_message'),
+
 ]
