@@ -138,6 +138,7 @@ parts/
 sdist/
 var/
 wheels/
+theme/
 *.egg-info/
 .installed.cfg
 *.egg
