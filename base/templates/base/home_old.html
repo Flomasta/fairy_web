@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+
+
+</style>
+{% block content %}
+
+    <div class="home-container">
+        <div>
+            {% include 'base/topics_component.html' %}
+        </div>
+        <div>
+            {% include 'base/feed_component.html' %}
+        </div>
+        <div class=" ">
+            {% include 'base/activity_component.html' %}
+        </div>
+    </div>
+{% endblock %}
