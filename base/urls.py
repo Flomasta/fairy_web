@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -15,5 +15,6 @@ urlpatterns = [
     path('update-user/', views.updateUser, name='update-user'),
     path('topics/', views.topicsPage, name='topics'),
     path('activity/', views.activityPage, name='activity'),
+    path('api/', include('base.api.urls')),
 
 ]
