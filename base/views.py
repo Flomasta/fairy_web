@@ -38,7 +38,6 @@ def logoutPage(request):
 
 
 def registerPage(request):
-    form = MyUserCreationForm()
     if request.method == 'POST':
         form = MyUserCreationForm(request.POST)
         if form.is_valid():
@@ -50,12 +49,12 @@ def registerPage(request):
         else:
             messages.error(request, 'An error occurred during the registration')
             return redirect('home')
-
+    form = MyUserCreationForm()
     return render(request, 'base/login_register.html', {'form': form})
 
 
 def home(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    q = request.GET.get('q', '')
     rooms = Room.objects.filter(Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q))
     topics = Topic.objects.all()[0:5]
     room_count = rooms.count()
